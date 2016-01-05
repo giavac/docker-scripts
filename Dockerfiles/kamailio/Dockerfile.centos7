@@ -1,0 +1,38 @@
+FROM centos:7
+
+MAINTAINER Giacomo Vacca "giacomo.vacca@gmail.com"
+
+ENV REFRESHED_AT 2016-01-04
+
+RUN yum install -y -q \
+    make \
+    gcc \
+    bison \
+    flex \
+    libevent-devel \
+    libcurl-devel \
+    && yum clean all
+
+RUN mkdir -p /root/kamailio
+WORKDIR /root/kamailio
+VOLUME ["/root/kamailio/"]
+
+EXPOSE 5060
+
+#####################################################
+
+# Build:
+### docker build -t gvacca/kamailio_async:centos7 -f Dockerfile.centos7 .
+
+# Run interactively inside network:
+### docker run -i -t --net=http_network --name=kamailio_async_centos -v $PWD:/root/kamailio/ gvacca/kamailio_async:centos7 /bin/bash
+# Then inside the container:
+# make cfg && make all && make install
+# Edit configuration as needed
+
+# Enter inside a running container:
+# docker exec -i -t kamailio_async_centos /bin/bash
+
+# Run in other ways:
+### docker run -d -p 6050:5060/udp gvacca/kamailio_async:centos7
+### docker run -i -t -p 6050:5060/udp gvacca/kamailio_async:centos7 /bin/bash
